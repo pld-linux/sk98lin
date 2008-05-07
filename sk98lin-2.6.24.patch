@@ -12,11 +12,13 @@ diff -ur sk98lin-10.50.1.3.orig/skge.c sk98lin-10.50.1.3/skge.c
  /*******************************************************************************
   *
   * Defines
-@@ -431,7 +435,6 @@
+@@ -431,7 +435,9 @@
  		return -ENODEV;
  	}
  
--	SET_MODULE_OWNER(dev);
++#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24)
+ 	SET_MODULE_OWNER(dev);
++#endif
  #ifdef ENABLE_FUTURE_ETH
  	SET_ETHTOOL_OPS(dev, &sk98lin_ethtool_ops);
  #endif
