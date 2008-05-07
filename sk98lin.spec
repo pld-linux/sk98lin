@@ -1,8 +1,7 @@
 #
 # TODO:
 #   - NAPI support is not ported and fails to build with
-#     kernels >= 2.6.24, it may be workarounded by disabling
-#     CONFIG_NETCONSOLE in kernel configuration
+#     kernels >= 2.6.24, workarounded by disabling NAPI
 #
 # Conditional build:
 %bcond_without	dist_kernel	# allow non-distribution kernel
@@ -23,6 +22,7 @@ Group:		Base/Kernel
 Source0:	%{pname}-%{version}.tar.bz2
 # Source0-md5:	fff67831eb00a1687f67c11afa6292c6
 Patch0:		%{pname}-2.6.24.patch
+Patch1:		%{pname}-disable-napi.patch
 URL:		http://www.marvell.com/
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20.2}
 BuildRequires:	rpmbuild(macros) >= 1.379
@@ -61,6 +61,9 @@ Marvell Yukon.
 %prep
 %setup -q -n %{pname}-%{version}
 %patch0 -p1
+%if "%{_kernel_ver}" >= "2.6.24"
+%patch1 -p1
+%endif
 
 %build
 %build_kernel_modules -m %{pname}
