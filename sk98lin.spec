@@ -13,16 +13,14 @@
 Summary:	Linux driver for family of Marvell Yukon adapters
 Summary(pl.UTF-8):	Sterownik do kart z rodziny Marvell Yukon
 Name:		%{pname}%{_alt_kernel}
-Version:	10.50.1.3
+Version:	10.60.2.3
 Release:	%{rel}
 License:	GPL v2
 Group:		Base/Kernel
-# Repackaged from original tarball, only sources for kernel 2.6 were left,
-# Makefile was updated and all proprietary (non GPL) stuff was removed.
+# Repackaged from original tarball, only sources for kernel 2.6 were left.
 Source0:	%{pname}-%{version}.tar.bz2
-# Source0-md5:	fff67831eb00a1687f67c11afa6292c6
-Patch0:		%{pname}-2.6.24.patch
-Patch1:		%{pname}-disable-napi.patch
+# Source0-md5:	a8b76fae6e52bd6424dc1966d86675f5
+Patch0:		%{pname}-disable-napi.patch
 URL:		http://www.marvell.com/
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20.2}
 BuildRequires:	rpmbuild(macros) >= 1.379
@@ -60,9 +58,8 @@ Marvell Yukon.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch0 -p1
 %if "%{_kernel_ver}" >= "2.6.24"
-%patch1 -p1
+%patch0 -p1
 %endif
 
 %build
