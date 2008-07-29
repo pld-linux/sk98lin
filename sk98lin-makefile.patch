@@ -1,0 +1,12 @@
+diff -ur sk98lin-10.60.2.3.orig/Makefile sk98lin-10.60.2.3/Makefile
+--- sk98lin-10.60.2.3.orig/Makefile	2008-04-28 10:12:43.000000000 +0200
++++ sk98lin-10.60.2.3/Makefile	2008-07-29 12:23:12.000000000 +0200
+@@ -54,7 +54,7 @@
+ 
+ 
+ 
+-obj-$(CONFIG_SK98LIN) += sk98lin.o
++obj-m += sk98lin.o
+ sk98lin-objs    :=	\
+ 		skge.o		\
+ 		sky2.o		\
