@@ -1,26 +1,21 @@
 #
-# TODO:
-#   - NAPI support is not ported and fails to build with
-#     kernels >= 2.6.24, workarounded by disabling NAPI
-#
 # Conditional build:
 %bcond_without	dist_kernel	# allow non-distribution kernel
 %bcond_with	verbose		# verbose build (V=1)
 #
 %define		pname	sk98lin
-%define		rel	11
+%define		rel	1
 #
 Summary:	Linux driver for family of Marvell Yukon adapters
 Summary(pl.UTF-8):	Sterownik do kart z rodziny Marvell Yukon
 Name:		%{pname}%{_alt_kernel}
-Version:	10.61.3.3
+Version:	10.70.2.3
 Release:	%{rel}
 License:	GPL v2
 Group:		Base/Kernel
 # Repackaged from original tarball, only sources for kernel 2.6 were left.
 Source0:	%{pname}-%{version}.tar.bz2
-# Source0-md5:	b80a2ac971f3aac77be6b91e92b5d5a0
-Patch0:		%{pname}-disable-napi.patch
+# Source0-md5:	114a1767c70cd4260aa86a17ba7ac377
 URL:		http://www.marvell.com/
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20.2}
 BuildRequires:	rpmbuild(macros) >= 1.379
@@ -58,9 +53,6 @@ Marvell Yukon.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%if "%{_kernel_ver}" >= "2.6.24"
-%patch0 -p1
-%endif
 
 %build
 %build_kernel_modules -m %{pname}
