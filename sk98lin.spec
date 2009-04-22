@@ -4,7 +4,7 @@
 %bcond_with	verbose		# verbose build (V=1)
 #
 %define		pname	sk98lin
-%define		rel	8
+%define		rel	9
 #
 Summary:	Linux driver for family of Marvell Yukon adapters
 Summary(pl.UTF-8):	Sterownik do kart z rodziny Marvell Yukon
