@@ -16,6 +16,8 @@ Group:		Base/Kernel
 # Repackaged from original tarball, only sources for kernel 2.6 were left.
 Source0:	%{pname}-%{version}.tar.bz2
 # Source0-md5:	0fbc10aa96db1401ed5e2aaa8d5d40aa
+Patch0:		%{pname}-2.6.29.patch
+Patch1:		%{pname}-2.6.30.patch
 URL:		http://www.marvell.com/
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20.2}
 BuildRequires:	rpmbuild(macros) >= 1.379
@@ -53,6 +55,8 @@ Marvell Yukon.
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch0 -p1
+%patch1 -p1
 
 %build
 %build_kernel_modules -m %{pname}
