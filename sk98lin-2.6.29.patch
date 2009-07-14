@@ -1,0 +1,386 @@
+diff -ur sk98lin-10.70.7.3.orig/skethtool.c sk98lin-10.70.7.3/skethtool.c
+--- sk98lin-10.70.7.3.orig/skethtool.c	2009-06-20 19:30:30.000000000 +0200
++++ sk98lin-10.70.7.3/skethtool.c	2009-07-15 01:16:39.391846112 +0200
+@@ -211,7 +211,7 @@
+ int SkGeGetSettings(struct net_device *dev,
+ 			struct ethtool_cmd *ecmd)
+ {
+-	DEV_NET			*pNet        = (DEV_NET*) dev->priv;
++	DEV_NET			*pNet        = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC			*pAC         = pNet->pAC;
+ 	int			port         = pNet->PortNr;
+ 	SK_GEPORT		*pPort       = &pAC->GIni.GP[port];
+@@ -274,7 +274,7 @@
+ void SkGeGetDrvInfo(struct net_device *dev,
+ 			struct ethtool_drvinfo *ecmd)
+ {
+-	DEV_NET			*pNet        = (DEV_NET*) dev->priv;
++	DEV_NET			*pNet        = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC			*pAC         = pNet->pAC;
+ 	char			versionString[32];
+ 
+@@ -301,7 +301,7 @@
+ void SkGeGetWolSettings(struct net_device *dev,
+ 			struct ethtool_wolinfo *ecmd)
+ {
+-	DEV_NET			*pNet        = (DEV_NET*) dev->priv;
++	DEV_NET			*pNet        = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC			*pAC         = pNet->pAC;
+ 
+ 	ecmd->supported = pAC->WolInfo.SupportedWolOptions;
+@@ -322,7 +322,7 @@
+ void SkGeGetPauseParam(struct net_device *dev,
+ 			struct ethtool_pauseparam *ecmd)
+ {
+-	DEV_NET			*pNet        = (DEV_NET*) dev->priv;
++	DEV_NET			*pNet        = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC			*pAC         = pNet->pAC;
+ 	int			port         = pNet->PortNr;
+ 	SK_GEPORT		*pPort       = &pAC->GIni.GP[port];
+@@ -362,7 +362,7 @@
+ int SkGeGetCoalesce(struct net_device *dev,
+ 			struct ethtool_coalesce *ecmd)
+ {
+-	DEV_NET			*pNet        = (DEV_NET*) dev->priv;
++	DEV_NET			*pNet        = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC			*pAC         = pNet->pAC;
+ 
+ 	DIM_INFO *Info = &pAC->DynIrqModInfo;
+@@ -426,8 +426,7 @@
+  */
+ SK_U32 SkGeGetRxCsum(struct net_device *dev)
+ {
+-
+-	DEV_NET			*pNet        = (DEV_NET*) dev->priv;
++	DEV_NET			*pNet        = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC			*pAC         = pNet->pAC;
+ 	int			port         = pNet->PortNr;
+ 
+@@ -449,7 +448,7 @@
+ 			u32 stringset,
+ 			u8 *strings)
+ {
+-	DEV_NET			*pNet        = (DEV_NET*) dev->priv;
++	DEV_NET			*pNet        = (DEV_NET*) netdev_priv(dev);
+ 	int			port         = pNet->PortNr;
+ 	int			i;
+ 
+@@ -504,7 +503,7 @@
+ 			struct ethtool_stats *stats,
+ 			u64 *data)
+ {
+-	DEV_NET			*pNet        = (DEV_NET*) dev->priv;
++	DEV_NET			*pNet        = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC			*pAC         = pNet->pAC;
+ 	SK_U32			Size         = sizeof(SK_PNMI_STRUCT_DATA);
+ 	SK_PNMI_STRUCT_DATA     *pPnmiStruct = &pAC->PnmiStruct;
+@@ -549,7 +548,7 @@
+ int SkGeSetSettings(struct net_device *dev,
+ 			struct ethtool_cmd *ecmd)
+ {
+-	DEV_NET			*pNet        = (DEV_NET*) dev->priv;
++	DEV_NET			*pNet        = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC			*pAC         = pNet->pAC;
+ 	int			port         = pNet->PortNr;
+ 
+@@ -637,7 +636,7 @@
+ int SkGeSetWolSettings(struct net_device *dev,
+ 			struct ethtool_wolinfo *ecmd)
+ {
+-	DEV_NET			*pNet        = (DEV_NET*) dev->priv;
++	DEV_NET			*pNet        = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC			*pAC         = pNet->pAC;
+ 
+ 	if (ecmd->wolopts != WAKE_MAGIC && ecmd->wolopts != 0)
+@@ -665,7 +664,7 @@
+ int SkGeSetPauseParam(struct net_device *dev,
+ 			struct ethtool_pauseparam *ecmd)
+ {
+-	DEV_NET			*pNet        = (DEV_NET*) dev->priv;
++	DEV_NET			*pNet        = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC			*pAC         = pNet->pAC;
+ 	int			port         = pNet->PortNr;
+ 	SK_GEPORT		*pPort = &pAC->GIni.GP[port];
+@@ -773,7 +772,7 @@
+ int SkGeSetCoalesce(struct net_device *dev,
+ 			struct ethtool_coalesce *ecmd)
+ {
+-	DEV_NET			*pNet        = (DEV_NET*) dev->priv;
++	DEV_NET			*pNet        = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC			*pAC         = pNet->pAC;
+ 	DIM_INFO		*Info        = &pAC->DynIrqModInfo;
+ 	int			PrevModeration = Info->IntModTypeSelect;
+@@ -957,7 +956,7 @@
+ int SkGeSetRxCsum(struct net_device *dev,
+ 			u32 data)
+ {
+-	DEV_NET			*pNet        = (DEV_NET*) dev->priv;
++	DEV_NET			*pNet        = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC			*pAC         = pNet->pAC;
+ 	int			port         = pNet->PortNr;
+ 
+@@ -982,7 +981,7 @@
+ int SkGePhysId(struct net_device *dev,
+ 			u32 data)
+ {
+-	DEV_NET			*pNet        = (DEV_NET*) dev->priv;
++	DEV_NET			*pNet        = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC			*pAC         = pNet->pAC;
+ 	SK_IOC                   IoC       = pAC->IoBase;
+ 	int			port         = pNet->PortNr;
+@@ -1184,7 +1183,7 @@
+ int SkGeSetTSO(struct net_device *dev,
+ 			u32 data)
+ {
+-	DEV_NET			*pNet        = (DEV_NET*) dev->priv;
++	DEV_NET			*pNet        = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC			*pAC         = pNet->pAC;
+ 
+ 	if (CHIP_ID_YUKON_2(pAC)) {
+diff -ur sk98lin-10.70.7.3.orig/skge.c sk98lin-10.70.7.3/skge.c
+--- sk98lin-10.70.7.3.orig/skge.c	2009-06-20 19:30:30.000000000 +0200
++++ sk98lin-10.70.7.3/skge.c	2009-07-15 01:14:49.568011782 +0200
+@@ -401,7 +401,7 @@
+ 		return -ENODEV;
+ 	}
+ 
+-	pNet = dev->priv;
++	pNet = netdev_priv(dev);
+ 	pNet->pAC = kmalloc(sizeof(SK_AC), GFP_KERNEL);
+ 	if (pNet->pAC == NULL){
+ 		free_netdev(dev);
+@@ -601,7 +601,7 @@
+ 		}
+ 
+ 		pAC->dev[1]   = dev;
+-		pNet          = dev->priv;
++		pNet          = netdev_priv(dev);
+ 		pNet->PortNr  = 1;
+ 		pNet->NetNr   = 1;
+ 		pNet->pAC     = pAC;
+@@ -1119,7 +1119,7 @@
+ struct pci_dev *pdev)   /* the device that is to resume */
+ {
+ 	struct net_device   *dev  = pci_get_drvdata(pdev);
+-	DEV_NET		    *pNet = (DEV_NET*) dev->priv;
++	DEV_NET		    *pNet = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC		    *pAC  = pNet->pAC;
+ 	SK_U16		     PmCtlSts;
+ #if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,19)
+@@ -1197,7 +1197,7 @@
+ #endif
+ {
+ 	struct net_device   *dev  = pci_get_drvdata(pdev);
+-	DEV_NET		    *pNet = (DEV_NET*) dev->priv;
++	DEV_NET		    *pNet = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC		    *pAC  = pNet->pAC;
+ 	SK_U16		     PciPMControlStatus;
+ 	SK_U16		     PciPMCapabilities;
+@@ -1540,8 +1540,8 @@
+ DEV_NET		*pNet;
+ SK_AC		*pAC;
+ 
+-	if (dev->priv) {
+-		pNet = (DEV_NET*) dev->priv;
++	if (netdev_priv(dev)) {
++		pNet = (DEV_NET*) netdev_priv(dev);
+ 		pAC = pNet->pAC;
+ 		AllocFlag = pAC->AllocFlag;
+ 		if (pAC->PciDev) {
+@@ -1721,7 +1721,7 @@
+ 	if (!dev)
+ 		return;
+ 
+-	pNet = (DEV_NET*) dev->priv;
++	pNet = (DEV_NET*) netdev_priv(dev);
+ 	pAC = pNet->pAC;
+ 	next = pAC->Next;
+ 
+@@ -2314,7 +2314,7 @@
+ SK_AC		*pAC;
+ SK_U32		IntSrc;		/* interrupts source register contents */	
+ 
+-	pNet = (DEV_NET*) dev->priv;
++	pNet = (DEV_NET*) netdev_priv(dev);
+ 	pAC = pNet->pAC;
+ 	
+ 	/*
+@@ -2440,7 +2440,7 @@
+ static int SkGeOpen(
+ struct SK_NET_DEVICE *dev)  /* the device that is to be opened */
+ {
+-	DEV_NET        *pNet = (DEV_NET*) dev->priv;
++	DEV_NET        *pNet = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC          *pAC  = pNet->pAC;
+ 	unsigned long   Flags;    	/* for the spin locks	*/
+ 	SK_BOOL         DualNet;
+@@ -2760,7 +2760,7 @@
+ static int SkGeClose(
+ struct SK_NET_DEVICE *dev)  /* the device that is to be closed */
+ {
+-	DEV_NET         *pNet = (DEV_NET*) dev->priv;
++	DEV_NET         *pNet = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC           *pAC  = pNet->pAC;
+ 	DEV_NET         *newPtrNet;
+ 	unsigned long    Flags;		/* for the spin locks		*/
+@@ -2803,7 +2803,7 @@
+ 			** by operator interaction must not be started up 
+ 			** again when the DIAG has finished. 
+ 			*/
+-			newPtrNet = (DEV_NET *) pAC->dev[0]->priv;
++			newPtrNet = (DEV_NET *) netdev_priv(pAC->dev[0]);
+ 			if (newPtrNet == pNet) {
+ 				pAC->WasIfUp[0] = SK_FALSE;
+ 			} else {
+@@ -3039,7 +3039,7 @@
+ SK_AC		*pAC;
+ int			Rc;	/* return code of XmitFrame */
+ 
+-	pNet = (DEV_NET*) dev->priv;
++	pNet = (DEV_NET*) netdev_priv(dev);
+ 	pAC = pNet->pAC;
+ 
+ 	if ((!skb_shinfo(skb)->nr_frags) ||
+@@ -3107,7 +3107,7 @@
+ 	SK_AC		*pAC     = pNet->pAC;
+ 	struct		SK_NET_DEVICE *dev = pAC->dev[0];
+ #else
+-	SK_AC		*pAC = ((DEV_NET*)(dev->priv))->pAC;
++	SK_AC		*pAC = ((DEV_NET*)(netdev_priv(dev)))->pAC;
+ 	int		WorkToDo = min(*budget, dev->quota);
+ #endif
+ 
+@@ -3161,7 +3161,7 @@
+ DEV_NET		*pNet;
+ SK_AC		*pAC;
+ 
+-	pNet = (DEV_NET*) dev->priv;
++	pNet = (DEV_NET*) netdev_priv(dev);
+ 	pAC = pNet->pAC;
+ 	pNet->NetConsoleMode = SK_TRUE;
+ 
+@@ -4206,7 +4206,7 @@
+ static int SkGeSetMacAddr(struct SK_NET_DEVICE *dev, void *p)
+ {
+ 
+-DEV_NET *pNet = (DEV_NET*) dev->priv;
++DEV_NET *pNet = (DEV_NET*) netdev_priv(dev);
+ SK_AC	*pAC = pNet->pAC;
+ int	Ret;
+ 
+@@ -4263,7 +4263,7 @@
+ 	SK_DBG_MSG(NULL, SK_DBGMOD_DRV, SK_DBGCAT_DRV_ENTRY,
+ 		("SkGeSetRxMode starts now... "));
+ 
+-	pNet = (DEV_NET*) dev->priv;
++	pNet = (DEV_NET*) netdev_priv(dev);
+ 	pAC = pNet->pAC;
+ 	if (pAC->RlmtNets == 1)
+ 		PortIdx = pAC->ActivePort;
+@@ -4375,7 +4375,7 @@
+ 	SK_DBG_MSG(NULL, SK_DBGMOD_DRV, SK_DBGCAT_DRV_ENTRY,
+ 		("SkGeChangeMtu starts now...\n"));
+ 
+-	pNet = (DEV_NET*) dev->priv;
++	pNet = (DEV_NET*) netdev_priv(dev);
+ 	pAC  = pNet->pAC;
+ 
+ 	/* MTU size outside the spec */
+@@ -4496,7 +4496,7 @@
+  */
+ static struct net_device_stats *SkGeStats(struct SK_NET_DEVICE *dev)
+ {
+-	DEV_NET		*pNet = (DEV_NET*) dev->priv;
++	DEV_NET		*pNet = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC		*pAC = pNet->pAC;
+ 	unsigned long	LateCollisions, ExcessiveCollisions, RxTooLong;
+ 	unsigned long	Flags; /* for spin lock */
+@@ -4801,7 +4801,7 @@
+ struct ifreq         *rq,   /* additional request structure containing data */
+ int                   cmd)  /* requested IOCTL command number               */
+ {
+-	DEV_NET          *pNet = (DEV_NET*) dev->priv;
++	DEV_NET          *pNet = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC            *pAC  = pNet->pAC;
+ 	struct pci_dev   *pdev = NULL;
+ 	void             *pMemBuf;
+@@ -6452,7 +6452,7 @@
+ 			}
+ 
+ 			if (pAC->SendLLCPacket == 1) {
+-				pNet = (DEV_NET *) pAC->dev[FromPort]->priv;
++				pNet = (DEV_NET *) netdev_priv(pAC->dev[FromPort]);
+ 
+ 				/* Start the LLC kernel timer */
+ 				if (!timer_pending(&pNet->LLCTimer)) {
+@@ -6653,7 +6653,7 @@
+ #if (defined (Y2_RECOVERY) || defined (Y2_LE_CHECK))
+ 	case SK_DRV_RECOVER:
+ 		spin_lock_irqsave(&pAC->InitLock, Flags);
+-		pNet = (DEV_NET *) pAC->dev[Param.Para32[0]]->priv;
++		pNet = (DEV_NET *) netdev_priv(pAC->dev[Param.Para32[0]]);
+ 
+ 		/* Recover already in progress */
+ 		if (pNet->InRecover) {
+@@ -6945,7 +6945,7 @@
+ 	SK_AC   *pAC  = NULL;
+ 	DEV_NET *pNet = NULL;
+ 
+-	pNet = (DEV_NET *) pAc->dev[0]->priv;
++	pNet = (DEV_NET *) netdev_priv(pAc->dev[0]);
+ 	pAC = pNet->pAC;
+ 
+ 	SK_MEMCPY(&(pAc->PnmiBackup), &(pAc->PnmiStruct), 
+@@ -6962,8 +6962,8 @@
+ 			pAC->WasIfUp[0] = SK_FALSE;
+ 		}
+ 
+-		if (pNet != (DEV_NET *) pAc->dev[1]->priv) {
+-			pNet = (DEV_NET *) pAc->dev[1]->priv;
++		if (pNet != (DEV_NET *) netdev_priv(pAc->dev[1])) {
++			pNet = (DEV_NET *) netdev_priv(pAc->dev[1]);
+ 			if (netif_running(pAC->dev[1])) {
+ 				pAC->WasIfUp[1] = SK_TRUE;
+ 				pAC->DiagFlowCtrl = SK_TRUE; /* for SkGeClose */
+diff -ur sk98lin-10.70.7.3.orig/sky2.c sk98lin-10.70.7.3/sky2.c
+--- sk98lin-10.70.7.3.orig/sky2.c	2009-06-20 19:30:30.000000000 +0200
++++ sk98lin-10.70.7.3/sky2.c	2009-07-15 01:11:46.852611996 +0200
+@@ -394,7 +394,7 @@
+ #endif
+ {
+ 	struct SK_NET_DEVICE  *dev  = (struct SK_NET_DEVICE *)dev_id;
+-	DEV_NET               *pNet = (DEV_NET*) dev->priv;
++	DEV_NET               *pNet = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC                 *pAC  = pNet->pAC;
+ #ifndef CONFIG_SK98LIN_NAPI
+ 	SK_BOOL                handledStatLE	= SK_FALSE;
+@@ -500,7 +500,7 @@
+ struct sk_buff       *skb,  /* socket buffer to be sent */
+ struct SK_NET_DEVICE *dev)  /* via which device?        */
+ {
+-	DEV_NET         *pNet    = (DEV_NET*) dev->priv;
++	DEV_NET         *pNet    = (DEV_NET*) netdev_priv(dev);
+ 	SK_AC           *pAC     = pNet->pAC;
+ 	SK_U8            FragIdx = 0;
+ 	SK_PACKET       *pSkPacket;
+@@ -669,7 +669,7 @@
+ 	DEV_NET	*pNet		= container_of(napi, DEV_NET, napi);
+ 	SK_AC	*pAC		= pNet->pAC;
+ #else
+-	DEV_NET	*pNet		= (DEV_NET*) dev->priv;
++	DEV_NET	*pNet		= (DEV_NET*) netdev_priv(dev);
+ 	SK_AC	*pAC		= pNet->pAC;
+ 	int	WorkToDo	= min(*budget, dev->quota);
+ #endif
+diff -ur sk98lin-10.70.7.3.orig/skproc.c sk98lin-10.70.7.3/skproc.c
+--- sk98lin-10.70.7.3.orig/skproc.c	2009-06-20 19:30:30.000000000 +0200
++++ sk98lin-10.70.7.3/skproc.c	2009-07-15 01:39:53.654802080 +0200
+@@ -96,7 +96,7 @@
+ 			printk("Max limit for sk_proc_read security counter!\n");
+ 			return;
+ 		}
+-		pNet = (DEV_NET*) SkgeProcDev->priv;
++		pNet = (DEV_NET*) netdev_priv(SkgeProcDev);
+ 		pAC = pNet->pAC;
+ 		next = pAC->Next;
+ 		pPnmiStruct = &pAC->PnmiStruct;
