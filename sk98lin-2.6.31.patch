@@ -51,7 +51,7 @@ diff -urN sk98lin-10.70.7.3.orig/skethtool.c sk98lin-10.70.7.3/skethtool.c
  	  }
 diff -urN sk98lin-10.70.7.3.orig/skge.c sk98lin-10.70.7.3/skge.c
 --- sk98lin-10.70.7.3.orig/skge.c	2009-09-25 23:25:35.000000000 +0200
-+++ sk98lin-10.70.7.3/skge.c	2009-09-26 00:11:21.762451012 +0200
++++ sk98lin-10.70.7.3/skge.c	2009-09-26 00:14:56.972184917 +0200
 @@ -340,6 +340,20 @@
  #endif
  };
@@ -73,15 +73,17 @@ diff -urN sk98lin-10.70.7.3.orig/skge.c sk98lin-10.70.7.3/skge.c
  
  /*****************************************************************************
   *
-@@ -366,6 +380,7 @@
+@@ -366,6 +380,9 @@
  	struct SK_NET_DEVICE *dev = NULL;
  	int			retval;
  	int			pci_using_dac;
++#ifdef HAVE_NET_DEVICE_OPS
 +	struct net_device_ops	*tmp_ops;
++#endif
  
  	retval = pci_enable_device(pdev);
  	if (retval) {
-@@ -441,6 +456,9 @@
+@@ -441,6 +458,9 @@
  #endif
  	SET_ETHTOOL_OPS(dev, &sk98lin_ethtool_ops);
  
@@ -91,7 +93,7 @@ diff -urN sk98lin-10.70.7.3.orig/skge.c sk98lin-10.70.7.3/skge.c
  	dev->open		=  &SkGeOpen;
  	dev->stop		=  &SkGeClose;
  	dev->get_stats		=  &SkGeStats;
-@@ -448,10 +466,11 @@
+@@ -448,10 +468,11 @@
  	dev->set_mac_address	=  &SkGeSetMacAddr;
  	dev->do_ioctl		=  &SkGeIoctl;
  	dev->change_mtu		=  &SkGeChangeMtu;
@@ -104,7 +106,7 @@ diff -urN sk98lin-10.70.7.3.orig/skge.c sk98lin-10.70.7.3/skge.c
  	SET_NETDEV_DEV(dev, &pdev->dev);
  
  	pAC->Index = sk98lin_boards_found;
-@@ -468,7 +487,12 @@
+@@ -468,7 +489,12 @@
  
  	/* shifter to later moment in time... */
  	if (CHIP_ID_YUKON_2(pAC)) {
@@ -117,7 +119,7 @@ diff -urN sk98lin-10.70.7.3.orig/skge.c sk98lin-10.70.7.3/skge.c
  #ifdef CONFIG_SK98LIN_NAPI
  #if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,23)
  		netif_napi_add(dev, &pNet->napi, SkY2Poll, 64);
-@@ -478,7 +502,12 @@
+@@ -478,7 +504,12 @@
  #endif
  #endif
  	} else {
@@ -130,7 +132,7 @@ diff -urN sk98lin-10.70.7.3.orig/skge.c sk98lin-10.70.7.3/skge.c
  #ifdef CONFIG_SK98LIN_NAPI
  #if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,23)
  		netif_napi_add(dev, &pNet->napi, SkGePoll, 64);
-@@ -609,7 +638,12 @@
+@@ -609,7 +640,12 @@
  		pNet->pAC     = pAC;
  
  		if (CHIP_ID_YUKON_2(pAC)) {
@@ -143,7 +145,7 @@ diff -urN sk98lin-10.70.7.3.orig/skge.c sk98lin-10.70.7.3/skge.c
  #ifdef CONFIG_SK98LIN_NAPI
  #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24)
  			dev->poll =  &SkY2Poll;
-@@ -617,7 +651,12 @@
+@@ -617,7 +653,12 @@
  #endif
  #endif
  		} else {
@@ -156,7 +158,7 @@ diff -urN sk98lin-10.70.7.3.orig/skge.c sk98lin-10.70.7.3/skge.c
  #ifdef CONFIG_SK98LIN_NAPI
  #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24)
  			dev->poll =  &SkGePoll;
-@@ -628,6 +667,9 @@
+@@ -628,6 +669,9 @@
  
  		SET_ETHTOOL_OPS(dev, &sk98lin_ethtool_ops);
  
@@ -166,7 +168,7 @@ diff -urN sk98lin-10.70.7.3.orig/skge.c sk98lin-10.70.7.3/skge.c
  		dev->open               = &SkGeOpen;
  		dev->stop               = &SkGeClose;
  		dev->get_stats          = &SkGeStats;
-@@ -635,10 +677,11 @@
+@@ -635,10 +679,11 @@
  		dev->set_mac_address    = &SkGeSetMacAddr;
  		dev->do_ioctl           = &SkGeIoctl;
  		dev->change_mtu         = &SkGeChangeMtu;
