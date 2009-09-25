@@ -4,7 +4,7 @@
 %bcond_with	verbose		# verbose build (V=1)
 #
 %define		pname	sk98lin
-%define		rel	5
+%define		rel	6
 #
 Summary:	Linux driver for family of Marvell Yukon adapters
 Summary(pl.UTF-8):	Sterownik do kart z rodziny Marvell Yukon
@@ -18,6 +18,7 @@ Source0:	%{pname}-%{version}.tar.bz2
 # Source0-md5:	0fbc10aa96db1401ed5e2aaa8d5d40aa
 Patch0:		%{pname}-2.6.29.patch
 Patch1:		%{pname}-2.6.30.patch
+Patch2:		%{pname}-2.6.31.patch
 URL:		http://www.marvell.com/
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20.2}
 BuildRequires:	rpmbuild(macros) >= 1.379
@@ -57,6 +58,7 @@ Marvell Yukon.
 %setup -q -n %{pname}-%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 %build_kernel_modules -m %{pname}
