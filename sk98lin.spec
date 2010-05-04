@@ -9,16 +9,13 @@
 Summary:	Linux driver for family of Marvell Yukon adapters
 Summary(pl.UTF-8):	Sterownik do kart z rodziny Marvell Yukon
 Name:		%{pname}%{_alt_kernel}
-Version:	10.70.7.3
+Version:	10.85.3.3
 Release:	%{rel}
 License:	GPL v2
 Group:		Base/Kernel
 # Repackaged from original tarball, only sources for kernel 2.6 were left.
 Source0:	%{pname}-%{version}.tar.bz2
-# Source0-md5:	0fbc10aa96db1401ed5e2aaa8d5d40aa
-Patch0:		%{pname}-2.6.29.patch
-Patch1:		%{pname}-2.6.30.patch
-Patch2:		%{pname}-2.6.31.patch
+# Source0-md5:	7f0a038472bcd1c48a91c8ad22f5405e
 URL:		http://www.marvell.com/
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20.2}
 BuildRequires:	rpmbuild(macros) >= 1.379
@@ -56,9 +53,6 @@ Marvell Yukon.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
 
 %build
 %build_kernel_modules -m %{pname}
